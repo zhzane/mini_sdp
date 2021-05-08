@@ -4,7 +4,7 @@
  * @version 0.1
  * @date 2020-12-17
  * 
- * @copyright Copyright (c) 2020
+ * @copyright Copyright (c) 2021 Tencent. All rights reserved.
  * 
  */
 #include <sstream>

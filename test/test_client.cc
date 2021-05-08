@@ -1,3 +1,12 @@
+/**
+ * @file test/test_client.cc
+ * @brief 
+ * @version 0.1
+ * @date 2021-01-14
+ * 
+ * @copyright Copyright (c) 2021 Tencent. All rights reserved.
+ * 
+ */
 // Client side implementation of UDP client-server model 
 #include <stdio.h> 
 #include <stdlib.h> 

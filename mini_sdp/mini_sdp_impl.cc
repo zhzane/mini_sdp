@@ -4,7 +4,7 @@
  * @version 0.1
  * @date 2021-01-11
  * 
- * @copyright Copyright (c) 2021
+ * @copyright Copyright (c) 2021 Tencent. All rights reserved.
  * 
  */
 #include <cstring>

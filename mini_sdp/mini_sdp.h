@@ -2,9 +2,9 @@
  * @file mini_sdp/mini_sdp.h
  * @brief 
  * @version 0.1
- * @date 2020-01-14
+ * @date 2021-01-14
  * 
- * @copyright Copyright (c) 2020
+ * @copyright Copyright (c) 2021 Tencent. All rights reserved.
  * 
  */
 #ifndef MINI_SDP_MINI_SDP_H_
