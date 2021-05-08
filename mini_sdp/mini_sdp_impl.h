@@ -26,6 +26,12 @@ constexpr char kMiniSdpUrlPrefix[] = "webrtc://";
 constexpr size_t kMiniSdpUrlMaxLen = 1200;
 constexpr size_t kMiniMiniSdpMaxLen = 1400;
 
+enum StreamDirection {
+    kStreamDefault = -1,
+    kStreamPull = 0,
+    kStreamPush = 1,
+};
+
 struct MiniSdpHdr {
     uint8_t packet_type                ;
     char magic_word[3]                 ;  //"SDP"
@@ -146,16 +152,15 @@ public:
     int PackToDstMem(char *data, size_t len, const std::string &origin_sdp, SdpType sdp_type, 
                      const std::string &stream_url,const std::string &svrsig, uint16_t seq = 0, 
                      int status_code = 0, bool imm_send = false, bool is_support_aac_fmtp = false,
-                     bool is_push = false);
+                     StreamDirection is_push = kStreamDefault);
 
 private:
     void copyStr16(uint16_t len, char *str, char *data, uint32_t &offset);
 
     void copyStr32(uint32_t len, char *str, char *data, uint32_t &offset);
 
-    std::string encrypt_key = kMiniSdpEncryptKey;
+    std::string encrypt_key;
 
-    SdpAddrType addr_type = SdpAddrType::kIPv4;
     std::string ip_addr;
 
     static uint16_t sdp_seq;
@@ -180,7 +185,7 @@ public:
     int ParseToString(char *data, uint32_t data_len, uint16_t &seq, SdpType &sdp_type, 
                       std::string &dst_sdp, std::string &dst_stream_url, std::string &svrsig, 
                       int &status_code, bool &imm_send, bool &is_support_aac_fmtp,
-                      bool &is_push);
+                      StreamDirection &is_push);
 
 private:
     MediaDescriptionPtr parseMedia(char *data, uint32_t &offset, MiniSdpHdr *mini_sdp_hdr);
@@ -189,7 +194,7 @@ private:
 
     void readStr32(std::string &dst, char *data, uint32_t &offset);
 
-    std::string encrypt_key = kMiniSdpEncryptKey;
+    std::string encrypt_key;
 
     SdpAddrType addr_type = SdpAddrType::kIPv4;
     std::string ip_addr;

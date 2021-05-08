@@ -120,7 +120,7 @@ int main() {
     attr.svrsig = "1h8s";
     attr.is_imm_send = true;
     attr.is_support_aac_fmtp = true;
-    attr.is_push = false;
+    attr.is_push = kStreamPush;
     int ret = ParseOriginSdpToMiniSdp(attr, buffer, 1400);
     cout << "pack ret:" << ret << endl;
 

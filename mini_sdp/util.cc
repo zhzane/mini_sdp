@@ -15,7 +15,6 @@ namespace mini_sdp {
 std::vector<StrSlice> StrSplit(const char* data, size_t len, char chr, bool is_remove_space) {
     std::vector<StrSlice> slices;
     const char* ppos = nullptr;
-    size_t word_len;
 
     StrSlice slice;
     while (len > 0) {

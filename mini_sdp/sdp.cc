@@ -248,6 +248,10 @@ std::string MediaDescription::ToString() const {
         oss << "a=extmap:" << (int)ext.first << ' ' << ext.second << kSdpEndOfLine;
     }
 
+    for (auto& attr : attributes_) {
+        oss << "a=" << attr.first << ':' << attr.second << kSdpEndOfLine;
+    }
+
     bool flex_fec_enable =false;
     // codecs
     for (auto& codec : Codecs) {

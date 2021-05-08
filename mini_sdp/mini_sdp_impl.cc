@@ -135,7 +135,7 @@ void MiniSdp::HdrNtoh() {
 int MiniSdpPacker::PackToDstMem(char *data, size_t len, const std::string &origin_sdp, SdpType sdp_type,
                                 const std::string &stream_url, const std::string &svrsig, uint16_t seq, 
                                 int status_code, bool imm_send, bool is_support_aac_fmtp,
-                                bool is_push) {
+                                StreamDirection is_push) {
     MiniSdp mini_sdp;
     uint32_t offset = 0;
 
@@ -179,9 +179,6 @@ int MiniSdpPacker::PackToDstMem(char *data, size_t len, const std::string &origi
     mini_sdp.mini_sdp_hdr.not_support_aac_fmtp = !is_support_aac_fmtp;
     mini_sdp.mini_sdp_hdr.not_seq_align = !(sdp_info->SessionId == "1");
 
-    mini_sdp.key_len = encrypt_key.size();
-    mini_sdp.encrypt_key = encrypt_key.c_str();
-
     for (auto media_info_pair : sdp_info->Medias) {
         auto media_info = media_info_pair.second;
         if (media_info->Protos == kSdpMediaProtoEncryptDefault) {
@@ -212,7 +209,14 @@ int MiniSdpPacker::PackToDstMem(char *data, size_t len, const std::string &origi
         mini_sdp.ufrag = media_info->IceUfrag.c_str();
         mini_sdp.pwd_len = media_info->IcePwd.size();
         mini_sdp.pwd = media_info->IcePwd.c_str();
+
+        std::string fingerprint = media_info->Fingerprint.first + " " + media_info->Fingerprint.second;
+        if (fingerprint.size() > 1) encrypt_key = fingerprint;
     }  // sdp_hdr
+    
+    mini_sdp.key_len = encrypt_key.size();
+    mini_sdp.encrypt_key = encrypt_key.c_str();
+
     mini_sdp.HdrHton();
     if (offset + sizeof(MiniSdpHdr) > len) return offset + sizeof(MiniSdpHdr);
     memcpy(data + offset, &(mini_sdp.mini_sdp_hdr), sizeof(MiniSdpHdr));
@@ -317,12 +321,13 @@ int MiniSdpPacker::PackToDstMem(char *data, size_t len, const std::string &origi
     memcpy(data+offset, mini_sdp.auth, 16);
     offset += 16;
 
-    uint8_t extern_byte = 0;
-    if (is_push) {
+    if (is_push == kStreamPull || is_push == kStreamPush) {
+        uint8_t extern_byte = 0;
         extern_byte |= (is_push ? 1u : 0u) << 0u;
+        memcpy(data+offset, &extern_byte, 1);
+        offset += 1;
     }
-    memcpy(data+offset, &extern_byte, 1);
-    offset += 1;
+
     return offset;
 }
 
@@ -345,7 +350,7 @@ void MiniSdpPacker::copyStr32(uint32_t len, char *str, char *data, uint32_t &off
 int MiniSdpLoader::ParseToString(char *data, uint32_t data_len, uint16_t &seq, SdpType &sdp_type, 
                                  std::string &dst_sdp, std::string &dst_stream_url, std::string &svrsig, 
                                  int &status_code, bool &imm_send, bool &is_support_aac_fmtp,
-                                 bool &is_push) {
+                                 StreamDirection &is_push) {
     uint32_t offset = 0;
     SessionDescriptionPtr sdp_info = MakeSessionDescription();
 
@@ -402,14 +407,18 @@ int MiniSdpLoader::ParseToString(char *data, uint32_t data_len, uint16_t &seq, S
     //auth
     offset += 16;
 
-    uint8_t extern_byte = 0;
-    extern_byte = *reinterpret_cast<uint8_t*>(data + offset);
-    offset += 1;
-    if (extern_byte & 1u == 1u) {
-        is_push = true;
-    } else {
-        is_push = false;
+    is_push = kStreamDefault;
+    if (offset < data_len) {
+        uint8_t extern_byte = 0;
+        extern_byte = *reinterpret_cast<uint8_t*>(data + offset);
+        offset += 1;
+        if (extern_byte & 1u) {
+            is_push = kStreamPush;
+        } else {
+            is_push = kStreamPull;
+        }
     }
+
 
     uint32_t cur_media_id = 0;
     for (auto media: medias) {
@@ -443,6 +452,12 @@ int MiniSdpLoader::ParseToString(char *data, uint32_t data_len, uint16_t &seq, S
         media->MediaId = mid;
         sdp_info->GroupBundle.push_back(mid);
         sdp_info->Medias.emplace(mid, media);
+
+        auto pos = encrypt_key.find(' ');
+        if (pos != std::string::npos) {
+            media->Fingerprint.first = encrypt_key.substr(0, pos);
+            media->Fingerprint.second = encrypt_key.substr(pos + 1);
+        }
     }
     //TODO auth    
     dst_stream_url = kMiniSdpUrlPrefix + stream_url;

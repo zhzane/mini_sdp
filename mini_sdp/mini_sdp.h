@@ -23,18 +23,18 @@ enum SdpRetcode {
 };
 
 struct OriginSdpAttr {
-    SdpType     sdp_type;       // offer sdp or answer sdp
-    std::string origin_sdp;
-    std::string stream_url;
-    std::string svrsig;         // unique id for session.
+    SdpType             sdp_type;       // offer sdp or answer sdp
+    std::string         origin_sdp;
+    std::string         stream_url;
+    std::string         svrsig;         // unique id for session.
                                 // format: <ip>:<ice-ufrag in answer>:<ice-ufrag in offer>
                                 // it would be used in stopping stream.
                                 // keep it empty when parse origin sdp to mini sdp.
-    int         status_code = 0;    // offer sdp not need
-    uint16_t    seq = 0;
-    bool        is_imm_send = false;    // sending media data immediately
-    bool        is_support_aac_fmtp = true;
-    bool        is_push = false;
+    int                 status_code = 0;    // offer sdp not need
+    uint16_t            seq = 0;
+    bool                is_imm_send = false;    // sending media data immediately
+    bool                is_support_aac_fmtp = true;
+    StreamDirection     is_push = kStreamDefault;   // -1 not have field , 0 false, 1 true
 };
 
 enum StatusCode {
