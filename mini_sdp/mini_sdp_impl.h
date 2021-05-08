@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include "sdp_parser.h"
+#include "mini_sdp.h"
 
 namespace mini_sdp {
 
@@ -25,12 +26,6 @@ constexpr char kMiniSdpEncryptKey[] = "zDAtJsmOyhljoSu4";
 constexpr char kMiniSdpUrlPrefix[] = "webrtc://";
 constexpr size_t kMiniSdpUrlMaxLen = 1200;
 constexpr size_t kMiniMiniSdpMaxLen = 1400;
-
-enum StreamDirection {
-    kStreamDefault = -1,
-    kStreamPull = 0,
-    kStreamPush = 1,
-};
 
 struct MiniSdpHdr {
     uint8_t packet_type                ;
