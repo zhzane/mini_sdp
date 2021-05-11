@@ -55,6 +55,7 @@ constexpr char kSdpExtMetaData02[] = "http://www.webrtc.org/experiments/rtp-hdre
 constexpr char kSdpExtMetaData03[] = "http://www.webrtc.org/experiments/rtp-hdrext/meta-data-03";
 constexpr char kSdpExtDts[] = "http://www.webrtc.org/experiments/rtp-hdrext/decoding-timestamp";
 constexpr char kSdpExtCts[] = "http://www.webrtc.org/experiments/rtp-hdrext/video-composition-time";
+constexpr char kSdpExtCts2[] = "uri:webrtc:rtc:rtp-hdrext:video:CompositionTime";
 constexpr char kSdpExtVideoFrameType[] = "http://www.webrtc.org/experiments/rtp-hdrext/video-frame-type";
 
 std::pair<SdpAddrType, bool> ParseSdpAddrType(const char* word, size_t len);
