@@ -36,7 +36,7 @@ string origin_sdp =
     "draft-holmer-rmcat-transport-wide-cc-extensions-01\r\na=mid:0\r\na=rtcp-"
     "mux\r\na=rtpmap:111 MP4A-ADTS/48000/2\r\na=rtcp-fb:111 nack\r\na=rtcp-fb:111 "
     "transport-cc\r\na=fmtp:111 "
-    "minptime=10;stereo=1;useinbandfec=1;PS-enabled=1;SBR-enabled=1;object=5;cpresent=1;config=4002420adca1fe0\r\n"
+    "minptime=10;stereo=1;useinbandfec=1;PS-enabled=1;SBR-enabled=1;object=5;cpresent=0;config=4002420adca1fe0\r\n"
     "a=rtpmap:124 flexfec-03/48000/2\r\n"
     "a=rtpmap:125 flexfec-03/44100/2\r\n"
     "a=ssrc-group:FEC-FR 27172315 50331648\r\n"
