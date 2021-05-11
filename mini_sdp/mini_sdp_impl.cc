@@ -77,13 +77,14 @@ static std::unordered_map<std::string, uint8_t> mini_sdp_ext_map = {
     {std::string(kSdpExtTransportCc), 2}, {std::string(kSdpExtMetaData01), 3},
     {std::string(kSdpExtMetaData02), 4},  {std::string(kSdpExtMetaData03), 5},
     {std::string(kSdpExtDts), 6},         {std::string(kSdpExtCts), 7},
-    {std::string(kSdpExtVideoFrameType), 8}
+    {std::string(kSdpExtVideoFrameType), 8}, {std::string(kSdpExtCts2), 9}
 };
 
 static std::vector<std::string> mini_sdp_ext_vec = {
     kSdpExtAbsSendTime, kSdpExtPayloutDelay, kSdpExtTransportCc,
     kSdpExtMetaData01,  kSdpExtMetaData02,   kSdpExtMetaData03,
-    kSdpExtDts,         kSdpExtCts,          kSdpExtVideoFrameType
+    kSdpExtDts,         kSdpExtCts,          kSdpExtVideoFrameType,
+    kSdpExtCts2
 };
 
 MiniSdp::MiniSdp() {
