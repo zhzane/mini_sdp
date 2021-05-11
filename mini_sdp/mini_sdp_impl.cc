@@ -529,10 +529,10 @@ MediaDescriptionPtr MiniSdpLoader::parseMedia(char *data, uint32_t &offset, Mini
         if (media_info->MediaType == SdpMediaType::kAudio) {
             if (aac_config) {
                 if (aac_config->object) code_info->FormatParams.emplace("object", std::to_string((int)aac_config->object));
-                if (aac_config->flag & kMiniAacFlagPs) code_info->FormatParams.emplace("PS-enabled", "1");
-                if (aac_config->flag & kMiniAacFlagSbr) code_info->FormatParams.emplace("SBR-enabled", "1");
-                if (aac_config->flag & kMiniAacFlagStereo) code_info->FormatParams.emplace("stereo", "1");
-                if (aac_config->flag & kMiniAacFlagStereo) code_info->FormatParams.emplace("cpresent", "1");
+                code_info->FormatParams.emplace("PS-enabled", (aac_config->flag & kMiniAacFlagPs) ? "1" : "0");
+                code_info->FormatParams.emplace("SBR-enabled", (aac_config->flag & kMiniAacFlagSbr) ? "1" : "0");
+                code_info->FormatParams.emplace("stereo", (aac_config->flag & kMiniAacFlagStereo) ? "1" : "0");
+                code_info->FormatParams.emplace("cpresent", (aac_config->flag & kMiniAacFlagCPresent) ? "1" : "0");
                 if (aac_config->config_len > 0) code_info->FormatParams.emplace("config", std::string(aac_config->config_data, aac_config->config_len));
             } else if (!codec_desc->flex_fec){
                 code_info->FormatParams.emplace("stereo","1");
